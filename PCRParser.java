@@ -2,13 +2,20 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
 
 import org.json.JSONObject;
 
 public class PCRParser {
-    private static String getJSONContent(URL url) {
+    private final HashMap<String, String> codesToNames;
+
+    public PCRParser() {
+        codesToNames = new HashMap<>();
+    }
+
+    private String getJSONContent(URL url) {
         StringBuilder output = new StringBuilder();
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -32,7 +39,7 @@ public class PCRParser {
      * @return A set of instructor codes.
      * @throws IllegalArgumentException if the course is not found
      */
-    public static Set<String> getCourseInstructors(String courseCode) {
+    public Set<String> getCourseInstructors(String courseCode) {
         try {
             URL url = new URL("https://penncoursereview.com/api/review/course/"
                     + courseCode + "?format=json");
@@ -49,7 +56,7 @@ public class PCRParser {
         return null;
     }
 
-    public static Set<String> getInstructorCourses(String instructorCode) {
+    public Set<String> getInstructorCourses(String instructorCode) {
         try {
             URL url = new URL("https://penncoursereview.com/api/review/instructor/"
                     + instructorCode + "?format=json");
@@ -58,6 +65,9 @@ public class PCRParser {
                 throw new IllegalArgumentException("instructor not found");
             }
             JSONObject json = new JSONObject(jsonContent);
+            if (!codesToNames.containsKey(instructorCode)) {
+                codesToNames.put(instructorCode, json.getString("name"));
+            }
             JSONObject instructors = json.getJSONObject("courses");
             return instructors.keySet();
         } catch (MalformedURLException e) {
@@ -66,7 +76,11 @@ public class PCRParser {
         return null;
     }
 
-    public static String getInstructorName(String instructorCode) {
+    public String getInstructorName(String instructorCode) {
+        if (codesToNames.containsKey(instructorCode)) {
+            return codesToNames.get(instructorCode);
+        }
+
         try {
             URL url = new URL("https://penncoursereview.com/api/review/instructor/"
                     + instructorCode + "?format=json");
