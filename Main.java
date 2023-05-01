@@ -6,7 +6,8 @@ public class Main {
         PCRParser parser = new PCRParser();
         Set<String> oneStepInstructors = new HashSet<>();
 
-        Set<String> carchidiCourses = parser.getInstructorCourses("592");
+        String carchidiCode = parser.getInstructorCode("Michael A. Carchidi");
+        Set<String> carchidiCourses = parser.getInstructorCourses(carchidiCode);
         if (carchidiCourses == null) {
             return;
         }
@@ -17,6 +18,7 @@ public class Main {
             }
             oneStepInstructors.addAll(instructors);
         }
+
         System.out.println(oneStepInstructors);
         System.out.println(oneStepInstructors.size());
 
