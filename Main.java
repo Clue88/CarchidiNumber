@@ -1,14 +1,14 @@
-import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        BFS bfs = new BFS();
-        HashMap<String, String[]> parents = bfs.exploreGraph("592", 1000);
-        String curr = "1";
-        while (curr != null) {
-            String[] parentArray = parents.get(curr);
-            System.out.println(parentArray[0] + " " + parentArray[1]);
-            curr = parentArray[0];
-        }
+        Scanner scanner = new Scanner(System.in);  // Create a Scanner object
+        System.out.print("Enter Professor Name: ");
+        String profName = scanner.nextLine();  // Read user input
+
+        GraphExplorer explorer = new GraphExplorer();
+        explorer.exploreGraph("592", true);
+//        explorer.exploreGraph("8706", true);
+        System.out.println(explorer.findShortestPath(profName));
     }
 }
