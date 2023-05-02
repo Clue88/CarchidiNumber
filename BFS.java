@@ -4,99 +4,61 @@ import java.io.IOException;
 import java.util.*;
 
 public class BFS {
-    private HashMap<String, Set<String>> graph;
+    private final PCRParser parser;
+    private final HashMap<String, String[]> parents;
 
-    public HashMap<String, Set<String>> BFS(String profName, PCRParser pcr) {
-        this.graph = new HashMap<>();
-
-        String prof1code = pcr.getInstructorCode(profName);
-        Set<String> prof1courses = pcr.getInstructorCourses(prof1code);
-        graph.put(prof1code, new HashSet<>());
-
-        // construct graph
-        for (String p1course : prof1courses) {
-            for (String p1 : pcr.getCourseInstructors(p1course)) {
-
-                //add professor node if it doesn't already exist
-                if (!graph.containsKey(p1)) {
-                    graph.put(p1, new HashSet<>());
-                }
-
-                graph.get(prof1code).add(p1);
-                graph.get(p1).add(prof1code);
-
-            }
-        }
-
-        return graph;
+    public BFS() {
+        parser = new PCRParser();
+        parents = new HashMap<>();
     }
 
+    public HashMap<String, String[]> exploreGraph(String startInstructorCode) {
+        return exploreGraph(startInstructorCode, Integer.MAX_VALUE, false);
+    }
 
-    public List<String> findShortestPath(String startProfName, String targetProfName, PCRParser pcr) {
-        String startProf = pcr.getInstructorCode(startProfName);
-        String targetProf = pcr.getInstructorCode(targetProfName);
+    public HashMap<String, String[]> exploreGraph(String startInstructorCode, int maxNodes) {
+        return exploreGraph(startInstructorCode, maxNodes, false);
+    }
 
-        Map<String, Integer> distances = new HashMap<>();
-        Map<String, String> predecessors = new HashMap<>(); //stores parent of a node as it is visited
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
-        queue.add(startProf);
-        distances.put(startProf, 0);
-        predecessors.put(startProf, null);
+    public HashMap<String, String[]> exploreGraph(
+            String startInstructorCode, int maxNodes, boolean writeToEdgeList) {
+        parents.put(startInstructorCode, new String[] {null, null});
+        LinkedList<String> queue = new LinkedList<>();
+        queue.add(startInstructorCode);
 
         while (!queue.isEmpty()) {
-            String currProf = queue.poll();
-            if (currProf.equals(targetProf)) {
-                break;
+            System.out.println(parents.size() + " instructors found so far");
+            if (parents.size() > maxNodes) {
+                return parents;
             }
-            if (visited.contains(currProf)) {
-                continue;
-            }
-            visited.add(currProf);
+            String curr = queue.poll();
+            Set<String> currCourses = new HashSet<>();
+            try {
+                currCourses = parser.getInstructorCourses(curr);
+            } catch (IllegalArgumentException ignored) {
 
-            // update distances of neighbors
-            for (String neighbor : graph.get(currProf)) {
-                if (!visited.contains(neighbor)) {
-                    int newDistance = distances.get(currProf) + 1;
-                    if (!distances.containsKey(neighbor) || newDistance < distances.get(neighbor)) {
-                        distances.put(neighbor, newDistance);
-                        predecessors.put(neighbor, currProf);
-                        queue.offer(neighbor);
+            }
+            for (String course : currCourses) {
+                Set<String> courseInstructors = new HashSet<>();
+                try {
+                    courseInstructors = parser.getCourseInstructors(course);
+                } catch (IllegalArgumentException ignored) {
+
+                }
+                for (String instructor : courseInstructors) {
+                    // TODO: Write to Edge List
+                    if (parents.containsKey(instructor)) {
+                        continue;
                     }
+                    queue.add(instructor);
+                    parents.put(instructor, new String[] {curr, course});
                 }
             }
         }
-
-        // construct path from start prof to target prof
-        List<String> path = new ArrayList<>();
-        if (!predecessors.containsKey(targetProf)) {
-            return path;
-        }
-        String currProf = targetProf;
-        while (currProf != null) {
-            path.add(0, pcr.getInstructorName(currProf));
-            currProf = predecessors.get(currProf);
-        }
-        return path;
+        return parents;
     }
 
-
-
-
-
-
-    //construct edge list file for zeno
-    public void writeEdgeList(String filename) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-        for (String prof : graph.keySet()) {
-            for (String neighbor : graph.get(prof)) {
-                writer.write(prof + " " + neighbor + "\n");
-            }
-        }
-        writer.close();
-    }
-
-
+    // TODO: Find Shortest Path
 }
 
 

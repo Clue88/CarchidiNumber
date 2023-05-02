@@ -12,9 +12,11 @@ import org.json.JSONObject;
 
 public class PCRParser {
     private final HashMap<String, String> codesToNames;
+    private final HashMap<String, Set<String>> coursesToInstructors;
 
     public PCRParser() {
         codesToNames = new HashMap<>();
+        coursesToInstructors = new HashMap<>();
     }
 
     private String getJSONContent(URL url) {
@@ -41,7 +43,9 @@ public class PCRParser {
      * @throws IllegalArgumentException if the course is not found
      */
     public Set<String> getCourseInstructors(String courseCode) {
-
+        if (coursesToInstructors.containsKey(courseCode)) {
+            return coursesToInstructors.get(courseCode);
+        }
         try {
             URL url = new URL("https://penncoursereview.com/api/review/course/"
                     + courseCode + "?format=json");
@@ -51,7 +55,11 @@ public class PCRParser {
             }
             JSONObject json = new JSONObject(jsonContent);
             JSONObject instructors = json.getJSONObject("instructors");
-            return instructors.keySet();
+            Set<String> keySet = instructors.keySet();
+            if (!coursesToInstructors.containsKey(courseCode)) {
+                coursesToInstructors.put(courseCode, keySet);
+            }
+            return keySet;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

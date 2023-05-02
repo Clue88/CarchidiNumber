@@ -1,35 +1,14 @@
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        PCRParser parser = new PCRParser();
-        Set<String> oneStepInstructors = new HashSet<>();
-
-        String carchidiCode = parser.getInstructorCode("Michael A. Carchidi");
-        Set<String> carchidiCourses = parser.getInstructorCourses(carchidiCode);
-        if (carchidiCourses == null) {
-            return;
+    public static void main(String[] args) {
+        BFS bfs = new BFS();
+        HashMap<String, String[]> parents = bfs.exploreGraph("592", 1000);
+        String curr = "1";
+        while (curr != null) {
+            String[] parentArray = parents.get(curr);
+            System.out.println(parentArray[0] + " " + parentArray[1]);
+            curr = parentArray[0];
         }
-        for (String courseCode : carchidiCourses) {
-            Set<String> instructors = parser.getCourseInstructors(courseCode);
-            if (instructors == null) {
-                continue;
-            }
-            oneStepInstructors.addAll(instructors);
-        }
-
-        System.out.println(oneStepInstructors);
-        System.out.println(oneStepInstructors.size());
-
-        for (String instructorCode : oneStepInstructors) {
-            System.out.println(parser.getInstructorName(instructorCode));
-        }
-
-        BFS bfsCarchidi = new BFS();
-        System.out.println(bfsCarchidi.BFS("Michael A. Carchidi", parser));
-        System.out.println(bfsCarchidi.findShortestPath("Abraham Wyner", "Vijay Kumar", parser));
-        bfsCarchidi.writeEdgeList("edgeList");
     }
 }
