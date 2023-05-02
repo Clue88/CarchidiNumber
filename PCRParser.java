@@ -42,8 +42,6 @@ public class PCRParser {
      */
     public Set<String> getCourseInstructors(String courseCode) {
 
-
-
         try {
             URL url = new URL("https://penncoursereview.com/api/review/course/"
                     + courseCode + "?format=json");
