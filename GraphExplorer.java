@@ -6,10 +6,12 @@ import java.io.FileWriter;
 public class GraphExplorer {
     private final PCRParser parser;
     private final HashMap<String, String[]> parents;
+    private final ArrayList<String> edges;
 
     public GraphExplorer() {
         parser = new PCRParser();
         parents = new HashMap<>();
+        edges = new ArrayList<>();
     }
 
     public void exploreGraph(String startInstructorCode) {
@@ -33,7 +35,7 @@ public class GraphExplorer {
             System.out.println(parents.size() + " instructors found so far");
             if (parents.size() > maxNodes) {
                 if (save) {
-                    writeToCSV("parentPointers.csv");
+                    writeParentsToCSV();
                 }
                 return;
             }
@@ -52,7 +54,6 @@ public class GraphExplorer {
 
                 }
                 for (String instructor : courseInstructors) {
-                    // TODO: Write to Edge List
                     if (parents.containsKey(instructor)) {
                         continue;
                     }
@@ -62,7 +63,7 @@ public class GraphExplorer {
             }
         }
         if (save) {
-            writeToCSV("parentPointers.csv");
+            writeParentsToCSV();
         }
     }
 
@@ -86,9 +87,9 @@ public class GraphExplorer {
         return path;
     }
 
-    private void writeToCSV(String filename) {
+    private void writeParentsToCSV() {
         try {
-            FileWriter writer = new FileWriter(filename);
+            FileWriter writer = new FileWriter("parentPointers.csv");
             for (Map.Entry<String, String[]> entry : parents.entrySet()) {
                 String[] value = entry.getValue();
                 writer.write(entry.getKey() + "," + value[0] + "," + value[1] + "\n");
@@ -116,5 +117,24 @@ public class GraphExplorer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public float getAveragePathLength() {
+        float totalPathLength = 0;
+        float count = 0;
+        for (Map.Entry<String, String[]> entry : parents.entrySet()) {
+            count++;
+            String curr = entry.getKey();
+            int pathLength = 0;
+            while (curr != null) {
+                String[] parentArray = parents.get(curr);
+                if (parentArray[0] != null) {
+                    pathLength++;
+                }
+                curr = parentArray[0];
+            }
+            totalPathLength += pathLength;
+        }
+        return totalPathLength / count;
     }
 }
