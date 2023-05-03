@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -7,8 +9,18 @@ public class Main {
         String profName = scanner.nextLine();  // Read user input
 
         GraphExplorer explorer = new GraphExplorer();
-        explorer.exploreGraph("592", true);
+//        explorer.exploreGraph("592", 3000, true);
 //        explorer.exploreGraph("8706", true);
-        System.out.println(explorer.findShortestPath(profName));
+        explorer.importFromCSV("parentPointers.csv");
+
+        List<String> shortestPath = new ArrayList<>();
+        try {
+            shortestPath = explorer.findShortestPath(profName);
+            System.out.println(shortestPath);
+            System.out.println("Carchidi Number: " + shortestPath.size());
+        } catch (IllegalArgumentException e) {
+            System.out.println(
+                    "Instructor not connected or doesn't exist. Check spelling (middle initials?)");
+        }
     }
 }

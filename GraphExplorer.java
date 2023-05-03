@@ -1,3 +1,4 @@
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.io.FileWriter;
@@ -32,7 +33,7 @@ public class GraphExplorer {
             System.out.println(parents.size() + " instructors found so far");
             if (parents.size() > maxNodes) {
                 if (save) {
-                    writeToCSV("parentPointers");
+                    writeToCSV("parentPointers.csv");
                 }
                 return;
             }
@@ -61,7 +62,7 @@ public class GraphExplorer {
             }
         }
         if (save) {
-            writeToCSV("parentPointers");
+            writeToCSV("parentPointers.csv");
         }
     }
 
@@ -69,11 +70,16 @@ public class GraphExplorer {
         List<String> path = new ArrayList<>();
         String professorName;
         String curr = parser.getInstructorCode(instructorName);
+
+        if (!parents.containsKey(curr)) {
+            throw new IllegalArgumentException("instructor not found or not connected");
+        }
+
         while (curr != null) {
             String[] parentArray = parents.get(curr);
-            if (parentArray[0]!= null) {
+            if (parentArray[0] != null) {
                 professorName = parser.getInstructorName(parentArray[0]);
-                path.add("(" + professorName + ", " + parentArray[1]+ ")");
+                path.add("(" + professorName + ", " + parentArray[1] + ")");
             }
             curr = parentArray[0];
         }
@@ -88,6 +94,25 @@ public class GraphExplorer {
                 writer.write(entry.getKey() + "," + value[0] + "," + value[1] + "\n");
             }
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void importFromCSV(String filename) {
+        try {
+            FileReader reader = new FileReader(filename);
+            Scanner scanner = new Scanner(reader);
+            while (scanner.hasNextLine()) {
+                String[] elements = scanner.nextLine().split(",");
+                if (elements[1].equals("null")) {
+                    elements[1] = null;
+                }
+                if (elements[2].equals("null")) {
+                    elements[2] = null;
+                }
+                parents.put(elements[0], new String[] {elements[1], elements[2]});
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
