@@ -6,12 +6,10 @@ import java.io.FileWriter;
 public class GraphExplorer {
     private final PCRParser parser;
     private final HashMap<String, String[]> parents;
-    private final ArrayList<String> edges;
 
     public GraphExplorer() {
         parser = new PCRParser();
         parents = new HashMap<>();
-        edges = new ArrayList<>();
     }
 
     public void exploreGraph(String startInstructorCode) {
