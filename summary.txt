@@ -1,0 +1,26 @@
+CarchidiNumber
+This readme file was generated on 2023-05-03 by Christopher Liu, Zeno Dancanet, Alexandra Oh (Group 3)
+
+
+Carchidi Count: exploring the interconnectedness of Penn's professor network
+
+A wise woman (Ms. Amy Calhoun) once spoke of the infamous Michael A. Carchidi, his love for teaching, and his undeniable
+versatility. Professor Carchidi has taught 26 different courses across 11 different departments here at Penn
+(EAS, ENGR, ENM, ESE, MATH, MEAM, OIDD, OPIM, PHYS, STAT, SYS)! Inspired by scientists' "collaboration distance" Erdős
+numbers, and by actors' Bacon Numbers, this project calculates Penn Professors' Carchidi Counts.
+
+A professor's Carchidi Count is their degree of separation from Prof. Carchidi, where there exists an edge between two
+professors if they have taught the same class. This project combines document search and graph algorithms to retrieve
+professor/course information from Penn Course Review, and subsequently uses BFS to find a shortest path between any two
+given professors via shared classes taught (if such paths exist).
+
+
+
+Proposal Changes: From SkySolver to Carchidi...
+
+This project deviates completely from our original proposal namely because we felt it would be more rewarding to
+incorporate multiple topics from the class and use as many skills we developed in NETS150 as possible. We also thought
+this idea was close to home and would be fun for Penn students and faculty to play around with :)
+
+Zeno worked on the visualizer, Alex helped build GraphExplorer, and Chris did all the webscraping in PCRParser
+(and all-around guided/mentored the team, thank you Chris -Alex)
