@@ -22,5 +22,5 @@ This project deviates completely from our original proposal namely because we fe
 incorporate multiple topics from the class and use as many skills we developed in NETS150 as possible. We also thought
 this idea was close to home and would be fun for Penn students and faculty to play around with :)
 
-Zeno worked on the visualizer, Alex helped build GraphExplorer, and Chris did all the webscraping in PCRParser
-(and all-around guided/mentored the team, thank you Chris -Alex)
+Zeno worked on the visualizer, Alex built GraphExplorer, and Chris built the user guide and did all the webscraping
+in PCRParser (and all-around guided/mentored the team, thank you Chris -Alex). 
