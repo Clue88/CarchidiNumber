@@ -25,18 +25,29 @@ public class GraphExplorer {
     }
 
     public void exploreGraph(String startInstructorCode, int maxNodes, boolean save) {
+        int saved = 0;
+
         parents.put(startInstructorCode, new String[] {null, null});
         LinkedList<String> queue = new LinkedList<>();
         queue.add(startInstructorCode);
 
         while (!queue.isEmpty()) {
-            System.out.println(parents.size() + " instructors found so far");
+            int foundSoFar = parents.size();
+            System.out.println(foundSoFar + " instructors found so far");
+
+            // auto-save every 500 instructors
+            if (save && foundSoFar - saved > 500) {
+                saved = foundSoFar;
+                writeParentsToCSV();
+            }
+
             if (parents.size() > maxNodes) {
                 if (save) {
                     writeParentsToCSV();
                 }
                 return;
             }
+
             String curr = queue.poll();
             Set<String> currCourses = new HashSet<>();
             try {

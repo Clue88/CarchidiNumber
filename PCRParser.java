@@ -22,7 +22,7 @@ public class PCRParser {
     private String getJSONContent(URL url) {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Cookie", "ga=GA1.2.709796897.1656641157; csrftoken=cQVsFOKKiTWIasPu5P3feclUb8SIWzJTwBvZKRBVgAlUFWGmDhncpu6hGsoVHDzl; sessionid=jia3lyerlrsj21c5a715b74k49332lqv");
+            con.setRequestProperty("Cookie", "csrftoken=cQVsFOKKiTWIasPu5P3feclUb8SIWzJTwBvZKRBVgAlUFWGmDhncpu6hGsoVHDzl; sessionid=jia3lyerlrsj21c5a715b74k49332lqv");
             if (con.getResponseCode() != 200) {
                 System.out.println(con.getResponseMessage());
                 System.out.println(url);
