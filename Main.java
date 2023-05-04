@@ -12,7 +12,7 @@ public class Main {
         // import from pre-processed parent pointer file
         explorer.importFromCSV("parentPointers.csv");
 
-        // generate BST tree
+        // generate BFS tree
 //        String startCode = new PCRParser().getInstructorCode("Michael A. Carchidi");
 //        explorer.exploreGraph(startCode, true);
 

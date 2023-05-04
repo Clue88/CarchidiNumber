@@ -25,3 +25,7 @@ replay_pid*
 .idea
 out
 target
+
+# python env
+env
+lib
