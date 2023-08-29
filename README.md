@@ -11,3 +11,6 @@ A professor's Carchidi Count is their degree of separation from Prof. Carchidi, 
 professors if they have taught the same class. This project combines graph algorithms with internet data acquisition to
 retrieve professor/course information from Penn Course Review, and subsequently uses BFS to find the shortest path
 between any two given professors via shared classes taught (if such paths exist).
+
+![The Carchidi tree graph starting from Prof. Carchidi (up to ~8000 nodes)](https://github.com/Clue88/CarchidiNumber/blob/main/carchidi_tree.png)
+The Carchidi tree graph starting from Prof. Carchidi (up to ~8000 nodes)
